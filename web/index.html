@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#146c5b">
+  <title>Speech Emotion Lab</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/recorder.js" defer></script>
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar wrap">
+    <a class="brand" href="/" aria-label="Speech Emotion Lab home">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 11v2m4-6v10m4-13v16m4-13v10m4-6v2"/></svg></span>
+      <span>Speech Emotion <strong>Lab</strong></span>
+    </a>
+    <a class="api-link" href="/docs" target="_blank" rel="noopener">API docs <span aria-hidden="true">↗</span></a>
+  </header>
+  <main class="wrap">
+    <section class="intro" aria-labelledby="page-title">
+      <div><p class="eyebrow">A CLOSER LISTEN</p><h1 id="page-title">Explore emotion<br>in every voice.</h1>
+      <p class="subtitle">Upload a short voice clip. Listen back, then explore its emotional expression across six categories.</p></div>
+      <aside class="model-card" aria-label="Current model">
+        <div class="model-status"><span class="status-dot" id="status-dot"></span><span id="model-status">Checking saved model…</span></div>
+        <h2>emotion2vec <span>+ Linear</span></h2>
+        <div class="model-numbers"><div><span class="number" id="best-epoch">—</span><span class="number-caption">Best epoch</span></div>
+        <div><span class="number" id="val-f1">—</span><span class="number-caption">Validation Macro-F1</span></div></div>
+        <p>Using <code>best.pt</code>, selected by validation Macro-F1 during early-stopped training.</p>
+      </aside>
+    </section>
+    <div id="model-error" class="error" role="alert" hidden></div>
+    <section class="workspace" aria-label="Audio emotion recognition">
+      <section class="panel input-panel" aria-labelledby="input-heading">
+        <div class="panel-heading"><span class="step">01</span><h2 id="input-heading">Your audio</h2></div>
+        <div class="source-tabs" role="group" aria-label="Audio source">
+          <button id="upload-tab" type="button" class="source-tab active" aria-pressed="true">Upload a file</button>
+          <button id="example-tab" type="button" class="source-tab" aria-pressed="false">Try a sample</button>
+          <button id="record-tab" type="button" class="source-tab" aria-pressed="false">Record audio</button>
+        </div>
+        <div id="upload-panel">
+          <div class="dropzone" id="dropzone">
+            <svg class="upload-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 31V10m-8 8 8-8 8 8M12 29v9h24v-9"/></svg>
+            <strong>Drop your audio here</strong><span>WAV or MP3 · Up to 20 MB · 30 seconds</span>
+            <button type="button" id="browse-button" class="secondary-button">Choose audio file</button>
+            <input type="file" id="audio-file" accept=".wav,.mp3,audio/wav,audio/mpeg" class="sr-only" aria-label="Upload a WAV or MP3 audio file">
+          </div>
+        </div>
+        <div id="example-panel" class="example-panel" hidden>
+          <label for="sample-select">Choose a voice clip</label>
+          <select id="sample-select"><option value="">Select a sample…</option></select>
+          <p class="hint">Short speech recordings from the CREMA-D dataset. Each sample is analyzed by the saved model.</p>
+        </div>
+        <div id="record-panel" class="record-panel" hidden>
+          <svg class="microphone-icon" viewBox="0 0 48 48" aria-hidden="true"><rect x="18" y="7" width="12" height="23" rx="6"/><path d="M12 23v1a12 12 0 0 0 24 0v-1M24 36v7m-7 0h14"/></svg>
+          <strong id="record-status" aria-live="polite">Ready to record</strong>
+          <span class="record-timer" id="record-timer">00:00 / 00:30</span>
+          <div class="mic-meter" role="meter" aria-label="Microphone input level" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="mic-meter"><div id="mic-level"></div></div>
+          <button type="button" id="record-button" class="secondary-button"><span id="record-button-label">Start recording</span></button>
+          <p class="hint">Allow microphone access, speak, then stop to listen back.<br>Recording stops automatically after 30 seconds.</p>
+        </div>
+        <div class="audio-preview" id="audio-preview" hidden>
+          <div class="file-details"><span class="file-icon" aria-hidden="true">♫</span><div><strong id="file-name"></strong><span id="file-meta"></span></div><button type="button" id="clear-button" aria-label="Remove selected audio" title="Remove audio">×</button></div>
+          <audio id="audio-player" controls preload="metadata" aria-label="Selected audio playback"></audio>
+        </div>
+        <div id="input-error" class="error" role="alert" hidden></div>
+        <button id="analyze-button" type="button" class="primary-button" disabled><span id="button-text">Analyze emotion</span><span class="button-arrow" aria-hidden="true">↗</span><span class="spinner" id="spinner" hidden></span></button>
+        <p class="processing-note" id="processing-note" aria-live="polite">Choose a file, sample, or microphone recording to begin.</p>
+      </section>
+      <section class="panel result-panel" aria-labelledby="result-heading" aria-busy="false" id="result-panel">
+        <div class="panel-heading"><span class="step">02</span><h2 id="result-heading">Emotion insights</h2></div>
+        <div class="empty-state" id="empty-state">
+          <div class="sound-orb" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+          <h3>A voice is all it takes.</h3><p>Your prediction and six emotion<br>probabilities will appear here.</p>
+        </div>
+        <div id="prediction-result" hidden aria-live="polite">
+          <div class="result-summary"><div><p class="eyebrow">PREDICTED EMOTION</p><h3 id="predicted-emotion"></h3></div><div class="probability-summary"><strong id="predicted-probability"></strong><span>Model probability</span></div></div>
+          <p id="result-meta" class="hint"></p>
+          <div class="probability-chart" id="probability-chart" role="img" aria-label="Six emotion probabilities"></div>
+          <button type="button" class="download-button" id="download-button">Download prediction <span>JSON ↓</span></button>
+        </div>
+      </section>
+    </section>
+    <footer><span class="footer-dot" aria-hidden="true"></span><p>Processed locally in this container. Temporary upload files are removed after analysis.</p><span class="footer-project">CREMA-D · Six emotions</span></footer>
+  </main>
+</body>
+</html>

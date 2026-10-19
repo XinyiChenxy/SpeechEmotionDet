@@ -1,0 +1,30 @@
+# Local environments, credentials and caches
+.cache/
+.venv*/
+venv/
+.env
+.env.*
+!.env.example
+.codex/
+.vscode/
+**/secrets.toml
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+# Datasets, model weights and generated outputs
+/data/
+/checkpoints/
+/outputs/
+*.zip
+*.tar
+*.tar.gz
+*.7z
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.safetensors
+*.log
+# Vendored source is tracked as files, without nested repository metadata
+**/.git/

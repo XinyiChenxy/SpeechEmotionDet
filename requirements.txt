@@ -1,0 +1,13 @@
+# Common/legacy dependencies for the existing Python 3.10 CUDA container.
+# Current emotion2vec project: also install requirements-emotion2vec.txt in its venv.
+torch==2.0.1
+torchaudio==2.0.2
+numpy==1.23.5
+scipy==1.10.1
+soundfile==0.12.1
+scikit-learn==1.2.2
+matplotlib==3.7.3
+einops==0.6.1
+yacs==0.1.8
+tqdm==4.66.5
+PyYAML==6.0

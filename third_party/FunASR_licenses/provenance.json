@@ -1,0 +1,15 @@
+{
+  "funasr_version": "1.2.6",
+  "wheel_sha256": "74f339fa92d252e17616758bc94666908d02356281690e1e242110ac6676800c",
+  "source": "https://pypi.org/project/funasr/1.2.6/",
+  "implementation": {
+    "__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "audio.py": "99a5ddd4acb898e7cf0d4407477d02d41ece0e85477c0dd346469da13272b8dc",
+    "base.py": "dac6cea6f4def1c2d9bcc47cf8cdd134733cbdf6eadfde45558c353d1283e38b",
+    "export_meta.py": "d5a420f819f17910bd0fa3756cdb4bdd16f336365c81aa7b39358293e496aaf9",
+    "fairseq_modules.py": "8c935beadad289d935fcf08deca9ab793b32b8fd3d353f280fd0d015bc865861",
+    "model.py": "e1090c331fa518d9c8f5da5d6a822c825e6959158747dc86b39f3c50bababb21",
+    "modules.py": "7ac6e0af73a2e8b6000c9ddadb2afde9115b1e894e41432a665f261ccf3c9a31",
+    "timm_modules.py": "0071546a25e1d0f5956fb8bcae1ad92c572d1d36d8ba4189c018a00213cda351"
+  }
+}

@@ -1,0 +1,33 @@
+# Relative paths resolve from the project root, independent of the shell cwd.
+seed: 42
+data:
+  root: data/AudioWAV
+  manifest: data/manifest.csv
+  sample_rate: 16000
+  max_seconds: 3.0  # Official CREMA-D crop; deterministic first 3 s in all modes.
+  train_ratio: 0.70
+  val_ratio: 0.15
+  augment: false
+  noise_snr_db: [20.0, 35.0]
+model:
+  version: Vesper-4  # Vesper-12 is supported when a genuine checkpoint is available.
+  checkpoint: checkpoints/Vesper-4.pt
+  output_rep: weighted_sum
+  projector_dim: 256
+  freeze_upstream: true  # Official downstream default: train layer weights and head.
+  freeze_cnn: true
+train:
+  output_dir: outputs/cremad_vesper4
+  device: auto
+  batch_size: 16  # RTX 3090 Ti 24 GiB; frozen upstream, <= 3 s audio.
+  num_workers: 2
+  epochs: 50
+  lr: 0.0001
+  optimizer: sgd
+  momentum: 0.9
+  weight_decay: 0.01
+  patience: 10
+  min_delta: 0.0001
+  amp: true
+  grad_clip: 5.0
+  torch_threads: 4

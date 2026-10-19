@@ -1,0 +1,6 @@
+# Install in the existing emotion2vec virtual environment.
+-r requirements-emotion2vec.txt
+fastapi==0.143.3
+uvicorn==0.54.0
+python-multipart==0.0.32
+httpx==0.28.1

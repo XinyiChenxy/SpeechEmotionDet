@@ -1,0 +1,32 @@
+seed: 42
+data:
+  root: data/AudioWAV
+  manifest: data/manifest.csv
+  sample_rate: 16000
+  max_seconds: null  # Full utterances; training and prediction use the same policy.
+  train_ratio: 0.70
+  val_ratio: 0.15
+  augment: false
+model:
+  backend: emotion2vec
+  encoder_dir: checkpoints/emotion2vec_base
+  feature_dim: 768
+  head: linear  # Optional mlp; choose before training, no model comparison required.
+  hidden_dim: 256
+  dropout: 0.2
+features:
+  cache: data/features/emotion2vec_base.pt
+  standardize: true  # Fit mean/std using TRAIN features only; save with the head.
+train:
+  output_dir: outputs/cremad_emotion2vec_linear
+  device: auto
+  batch_size: 128
+  num_workers: 0
+  epochs: 100
+  lr: 0.001
+  weight_decay: 0.01
+  patience: 15
+  min_delta: 0.0001
+  grad_clip: 5.0
+  torch_threads: 4
+  tensorboard: true
